@@ -1,0 +1,73 @@
+Sub Stocks()
+
+         Dim ws As Worksheet
+
+         For Each ws In Worksheets
+
+Dim Ticker As String
+Dim Summary As Integer
+Dim Open_Price As Double
+Dim Close_Price As Double
+Dim Yearly_Change As Double
+Dim Percent_Change As Double
+Dim Total_Stock_Volume As LongLong
+
+Summary = 2
+Total_Stock_Volume = 0
+lastrow = ws.Cells(Rows.Count, 1).End(xlUp).Row
+
+For i = 2 To lastrow
+
+If ws.Cells(i + 1, 1).Value <> ws.Cells(i, 1).Value Then
+
+Ticker = ws.Cells(i, 1).Value
+Total_Stock_Volume = Total_Stock_Volume + ws.Cells(i, 7).Value
+
+'could not figure out how to identify the first open price and last close price for each year
+Open_Price = ws.Cells(i, 3).Value
+Close_Price = ws.Cells(i, 6).Value
+Yearly_Change = Close_Price - Open_Price
+Percent_Change = Yearly_Change * 0.01
+
+ws.Range("I1") = "Ticker"
+ws.Range("J1") = "Yearly Change"
+ws.Range("K1") = "Percent Change"
+ws.Range("L1") = "Total Volume"
+ws.Range("O1") = "Ticker"
+ws.Range("P1") = "Value"
+ws.Range("N2") = "Greatest % Increase"
+ws.Range("N3") = "Greatest % Decrease"
+ws.Range("N4") = "Greatest Total Volume"
+ws.Range("I" & Summary).Value = Ticker
+ws.Range("J" & Summary).Value = Yearly_Change
+ws.Range("K" & Summary).Value = Percent_Change
+ws.Range("L" & Summary).Value = Total_Stock_Volume
+
+Summary = Summary + 1
+Total_Stock_Volume = 0
+
+Else
+
+Total_Stock_Volume = Total_Stock_Volume + ws.Cells(i, 7).Value
+
+End If
+
+Next i
+
+lastrow2 = ws.Cells(Rows.Count, 9).End(xlUp).Row
+For j = 2 To lastrow2
+
+If ws.Cells(j, 10).Value > 0 Then
+ws.Cells(j, 10).Interior.ColorIndex = 4
+
+Else
+ws.Cells(j, 10).Interior.ColorIndex = 3
+
+End If
+
+Next j
+
+Next
+
+End Sub
+
